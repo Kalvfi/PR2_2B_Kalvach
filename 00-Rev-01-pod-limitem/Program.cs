@@ -25,5 +25,7 @@
 
             return soucet / x;
         }
+        
+        //private static double PrumerPodLimitem(double[] cisla, double limit) => cisla.Where(x => x < limit).Average();
     }
 }
