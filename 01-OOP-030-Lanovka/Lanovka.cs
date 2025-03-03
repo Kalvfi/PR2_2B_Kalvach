@@ -23,7 +23,7 @@ namespace _01_OOP_030_Lanovka
         public bool JeVolnoNahore
         {
             get
-            {//zde musíte implementovat jinak} 
+            {/*zde musíte implementovat jinak*/ } 
         }
         public int Zatizeni
         {

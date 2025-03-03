@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _03_OOP3_030_Voziky
 {
-    internal class Vozik
+    public class Vozik
     {
         public int Id { get; }
         public int CasPouziti { get; private set; }
