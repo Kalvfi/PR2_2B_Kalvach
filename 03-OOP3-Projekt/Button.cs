@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _03_OOP3_Projekt
+{
+    abstract class Button
+    {
+        public string Label { get; set; }
+        public bool IsSelected { get; set; }
+        public Action Action { get; set; }
+
+        public Button(string label, Action action)
+        {
+            Label = label;
+            IsSelected = false;
+            Action = action;
+        }
+
+        public virtual void ExecuteAction() 
+        {
+            Action.Invoke();
+        }
+
+        public virtual void Draw()
+        {
+            if (IsSelected)
+                Console.BackgroundColor = ConsoleColor.Yellow;
+
+            Console.Write(Label);
+            Console.ResetColor();
+        }
+    }
+
+    class SalesmanButton : Button
+    {
+        public SalesmanButton(string label, Action action) : base(label, action)
+        {
+        }
+
+        public override void Draw()
+        {
+            if (IsSelected)
+                Console.ForegroundColor = ConsoleColor.Black;
+            base.Draw();
+        }
+    }
+
+    class FileButton : Button
+    {
+        public bool Type { get; set; }
+
+        public FileButton(Action action, bool type, string label="") : base(label, action)
+        {
+            Type = type;
+            Label = (Type) ? "Přidat" : "Odebrat";
+        }
+
+        public override void Draw()
+        {
+            Console.ForegroundColor = (Type) ? ConsoleColor.Green : ConsoleColor.Red;
+            base.Draw();
+        }
+    }
+
+    class NavigationButton : Button
+    {
+        public NavigationButton(string label, Action action) : base(label, action)
+        {
+        }
+
+        public override void Draw()
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            base.Draw();
+        }
+    }
+}
