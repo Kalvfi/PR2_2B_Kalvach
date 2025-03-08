@@ -9,9 +9,9 @@ namespace _03_OOP3_Projekt
 {
     abstract class Button
     {
-        public string Label { get; set; }
+        public string Label { get; protected set; }
         public bool IsSelected { get; set; }
-        public Action Action { get; set; }
+        public Action Action { get; protected set; }
 
         public Button(string label, Action action)
         {
@@ -51,12 +51,30 @@ namespace _03_OOP3_Projekt
 
     class FileButton : Button
     {
-        public bool Type { get; set; }
+        public bool Type { get; private set; }
+        public Salesman Salesman { get; private set; }
 
-        public FileButton(Action action, bool type, string label="") : base(label, action)
+        public FileButton(bool type, Salesman salesman) : base(null, null)
         {
             Type = type;
+            Salesman = salesman;
+            Action = Type ? () => FileManager.AddToFile(Salesman) : () => FileManager.RemoveFromFile(Salesman);
             Label = (Type) ? "Přidat" : "Odebrat";
+        }
+
+        public override void ExecuteAction()
+        {
+            base.ExecuteAction();
+            if (FileManager.FileContent != null)
+            {
+                Type = FileManager.FileContent.Contains(Salesman) ? false : true;
+            }
+            else 
+            {
+                Type = true;
+            }
+            Action = Type ? () => FileManager.AddToFile(Salesman) : () => FileManager.RemoveFromFile(Salesman);
+            Label = Type ? "Přidat" : "Odebrat";
         }
 
         public override void Draw()

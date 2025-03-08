@@ -1,6 +1,7 @@
 ﻿using System.Transactions;
 using System.IO;
 using System.Text;
+using System.Globalization;
 
 namespace _03_OOP3_Projekt
 {
@@ -38,17 +39,28 @@ namespace _03_OOP3_Projekt
             Salesman superior = Salesman.FindSuperior(boss, salesman);
             int branchSales = salesman.BranchSales();
 
-            List<Button> buttons = new List<Button>();
+            List<Button> buttons =
+            [
+                new NavigationButton("Přejít nahoru", () => DisplayExplorer(boss)),
+                new NavigationButton("Přejít na seznam", () => DisplayFile())
+            ];
 
-            buttons.Add(new NavigationButton("Přejít nahoru", () => DisplayExplorer(boss)));
-            buttons.Add(new NavigationButton("Přejít na seznam", () => DisplayFile()));
-            buttons.Add(new FileButton(() => AddToFile(salesman), true));
+            if (FileManager.FileContent != null)
+            {
+                buttons.Add(FileManager.FileContent.Contains(salesman) ? new FileButton(false, salesman) : new FileButton(true, salesman));
+            }
+            else 
+            {
+                buttons.Add(new FileButton(true, salesman));
+            }
+
 
             if (superior != null)
             {
                 buttons.Add(new SalesmanButton(superior.ToString(), () => DisplayExplorer(superior)));
             }
-            foreach (var subordinate in salesman.Subordinates)
+
+            foreach (Salesman subordinate in salesman.Subordinates)
             {
                 buttons.Add(new SalesmanButton(subordinate.ToString(), () => DisplayExplorer(subordinate)));
             }
@@ -77,7 +89,7 @@ namespace _03_OOP3_Projekt
                 Console.Write("\t");
                 foreach (Button button in buttons)
                 {
-                    if (button.Label == "Přidat" || button.Label == "Odebrat")
+                    if (button is FileButton)
                         button.Draw();
                 }
                 Console.WriteLine();
@@ -98,13 +110,10 @@ namespace _03_OOP3_Projekt
                 Console.Write("Podřízení: ");
                 foreach (Button button in buttons)
                 {
-                    foreach (Salesman subordinate in salesman.Subordinates)
+                    if (button is SalesmanButton && button.Label != superior?.ToString())
                     {
-                        if (button.Label == subordinate.ToString())
-                        {
-                            button.Draw();
-                            Console.Write("\n           ");
-                        }
+                        button.Draw();
+                        Console.Write("\n           ");
                     }
                 }
 
@@ -114,16 +123,22 @@ namespace _03_OOP3_Projekt
 
         static void DisplayFile()
         {
-            StreamReader reader;
-            StreamWriter writer;
-            string filename = null;
+            List<Button> buttons =
+            [
+                new NavigationButton("Založit", () => FileManager.CreateFile(() => DisplayFile())),
+                new NavigationButton("Načíst", () => FileManager.LoadFile(boss, () => DisplayFile())),
+                new NavigationButton("Uložit", () => FileManager.SaveFile()),
+                new NavigationButton("Přejít na prohlížeč", () => DisplayExplorer(boss)),
+            ];
 
-            List<Button> buttons = new List<Button>();
-
-            buttons.Add(new NavigationButton("Založit", () => CreateFile()));
-            buttons.Add(new NavigationButton("Načíst", () => LoadFile()));
-            buttons.Add(new NavigationButton("Uložit", () => SaveFile()));
-            buttons.Add(new NavigationButton("Přejít na prohlížeč", () => DisplayExplorer(boss)));
+            if (FileManager.FileContent != null && FileManager.FileContent.Count() != 0)
+            {
+                foreach (Salesman salesman in FileManager.FileContent)
+                {
+                    if (salesman != null)
+                        buttons.Add(new SalesmanButton(salesman.ToString(), () => DisplayExplorer(salesman)));
+                }
+            }
 
             buttons[0].IsSelected = true;
 
@@ -154,44 +169,22 @@ namespace _03_OOP3_Projekt
                         button.Draw();
                 }
                 Console.WriteLine();
-                Console.WriteLine(new String('-', 34));
+                Console.WriteLine(new String('-', 53));
                 Console.WriteLine();
-                if(filename != null) 
+                Console.WriteLine(FileManager.CurrentFileName);
+                Console.WriteLine(new String('-', 20));
+                foreach (Button button in buttons)
                 {
-                    Console.Write(filename);
-                    Console.WriteLine(new String('-', 20));
-                    Console.WriteLine("\n");
-                    DrawFile();
+                    if (button is SalesmanButton)
+                    {
+                        button.Draw();
+                        Console.Write("\n");
+                    }
                 }
 
                 HandleInput(buttons);
 
             }
-        }
-
-        private static void CreateFile()
-                {
-                    throw new NotImplementedException();
-                }
-
-        private static void LoadFile()
-                {
-                    throw new NotImplementedException();
-                }
-
-        private static void SaveFile()
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void DrawFile()
-        {
-            throw new NotImplementedException();
-        }
-
-        static void AddToFile(Salesman salesman) 
-        {
-            throw new NotImplementedException();
         }
 
         static void HandleInput(List<Button> buttons) 
@@ -239,9 +232,27 @@ namespace _03_OOP3_Projekt
                     }
                     break;
                 case ConsoleKey.Escape:
-                    Environment.Exit(0);
+                    CheckExit();
                     break;
             }
+        }
+
+        static void CheckExit() 
+        {
+            if (!FileManager.IsSaved) 
+            {
+                Console.Clear();
+                Console.WriteLine("Máte neuložené změny. Chcete je uložit? (A/N)");
+                char choice = char.ToUpper(Console.ReadKey().KeyChar);
+
+                if (choice == 'A')
+                {
+                    FileManager.SaveFile();
+                    DisplayFile();
+                }
+            }
+
+            Environment.Exit(0);
         }
     }
 }

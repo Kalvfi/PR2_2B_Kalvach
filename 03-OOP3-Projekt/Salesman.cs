@@ -108,14 +108,29 @@ namespace _03_OOP3_Projekt
 
         public static Salesman FindSuperior(Salesman root, Salesman node)
         {
-            foreach (var subordinate in root.Subordinates)
+            foreach (Salesman subordinate in root.Subordinates)
             {
                 if (subordinate == node)
                     return root;
 
-                var superior = FindSuperior(subordinate, node);
+                Salesman superior = FindSuperior(subordinate, node);
                 if (superior != null)
                     return superior;
+            }
+
+            return null;
+        }
+
+        public static Salesman FindSalesman(Salesman root, string node)
+        {
+            if (root.ToString() == node)
+                return root;
+
+            foreach (Salesman subordinate in root.Subordinates)
+            {
+                Salesman salesman = FindSalesman(subordinate, node);
+                if (salesman != null)
+                    return salesman;
             }
 
             return null;
