@@ -12,7 +12,7 @@ namespace _03_OOP3_Projekt
     {
         static int NextId = 1;
 
-        private int ID { get; set; }
+        public int ID { get; private set; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
         public int Sales { get; private set; }
@@ -121,9 +121,9 @@ namespace _03_OOP3_Projekt
             return null;
         }
 
-        public static Salesman FindSalesman(Salesman root, string node)
+        public static Salesman FindSalesman(Salesman root, int node)
         {
-            if (root.ToString() == node)
+            if (root.ID == node)
                 return root;
 
             foreach (Salesman subordinate in root.Subordinates)

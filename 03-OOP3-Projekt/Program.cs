@@ -253,6 +253,7 @@ namespace _03_OOP3_Projekt
                     Console.WriteLine("Máte neuložené změny. Chcete je uložit?\n");
                     foreach (Button button in buttons) 
                     {
+                        Console.Write("\t");
                         button.Draw();
                         Console.Write("\t");
                     }

@@ -90,12 +90,13 @@ namespace _03_OOP3_Projekt
 
         private static List<Salesman> DeserializeSalesmen(Salesman root, string content)
         {
-            string[] salesmenNames = content.Split('\n');
+            int[] salesmenIDs = content.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+
             List<Salesman> salesmen = new List<Salesman>();
 
-            foreach (string name in salesmenNames)
+            foreach (int ID in salesmenIDs)
             {
-                salesmen.Add(Salesman.FindSalesman(root, name.Trim()));
+                salesmen.Add(Salesman.FindSalesman(root, ID));
             }
 
             return salesmen;
@@ -108,7 +109,7 @@ namespace _03_OOP3_Projekt
             foreach (Salesman salesman in salesmen) 
             {
                 if(salesman != null)
-                    content += salesman.ToString() + "\n";
+                    content += salesman.ID + "\n";
             }
 
             return content;
