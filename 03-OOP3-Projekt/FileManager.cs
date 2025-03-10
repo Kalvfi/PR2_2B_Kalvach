@@ -14,7 +14,7 @@ namespace _03_OOP3_Projekt
         {
             Console.Clear();
             Console.Write("Zadej název nového souboru: ");
-            CurrentFileName = Console.ReadLine();
+            CurrentFileName = Console.ReadLine() + ".txt";
             File.WriteAllText(CurrentFileName, "");
             FileContent = new List<Salesman>();
             IsSaved = true;
@@ -25,7 +25,7 @@ namespace _03_OOP3_Projekt
         {
             Console.Clear();
             Console.Write("Zadej název souboru, který chceš načíst: ");
-            CurrentFileName = Console.ReadLine();
+            CurrentFileName = Console.ReadLine() + ".txt";
             if (File.Exists(CurrentFileName))
             {
                 var content = File.ReadAllText(CurrentFileName);
@@ -38,11 +38,13 @@ namespace _03_OOP3_Projekt
                 Console.Clear();
                 Console.WriteLine($"Soubor '{CurrentFileName}' neexistuje.");
                 CurrentFileName = null;
+                FileContent = null;
                 Console.ReadKey();
+                refresher.Invoke();
             }
         }
 
-        public static void SaveFile()
+        public static void SaveFile(Action refresher)
         {
             if (CurrentFileName == null)
             {
@@ -58,6 +60,7 @@ namespace _03_OOP3_Projekt
                 Console.WriteLine($"Soubor '{CurrentFileName}' byl uložen.");
                 Console.ReadKey();
                 IsSaved = true;
+                refresher.Invoke();
             }  
         }
 

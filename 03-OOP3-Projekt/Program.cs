@@ -54,7 +54,6 @@ namespace _03_OOP3_Projekt
                 buttons.Add(new FileButton(true, salesman));
             }
 
-
             if (superior != null)
             {
                 buttons.Add(new SalesmanButton(superior.ToString(), () => DisplayExplorer(superior)));
@@ -127,7 +126,7 @@ namespace _03_OOP3_Projekt
             [
                 new NavigationButton("Založit", () => FileManager.CreateFile(() => DisplayFile())),
                 new NavigationButton("Načíst", () => FileManager.LoadFile(boss, () => DisplayFile())),
-                new NavigationButton("Uložit", () => FileManager.SaveFile()),
+                new NavigationButton("Uložit", () => FileManager.SaveFile(() => DisplayFile())),
                 new NavigationButton("Přejít na prohlížeč", () => DisplayExplorer(boss)),
             ];
 
@@ -241,14 +240,24 @@ namespace _03_OOP3_Projekt
         {
             if (!FileManager.IsSaved) 
             {
-                Console.Clear();
-                Console.WriteLine("Máte neuložené změny. Chcete je uložit? (A/N)");
-                char choice = char.ToUpper(Console.ReadKey().KeyChar);
+                List<Button> buttons =
+                [
+                    new BoolButton(true, "ANO", () => FileManager.SaveFile(() => DisplayFile())),
+                    new BoolButton(false, "NE", () => Environment.Exit(0))
+                ];
+                buttons[0].IsSelected = true;
 
-                if (choice == 'A')
+                while (true) 
                 {
-                    FileManager.SaveFile();
-                    DisplayFile();
+                    Console.Clear();
+                    Console.WriteLine("Máte neuložené změny. Chcete je uložit?\n");
+                    foreach (Button button in buttons) 
+                    {
+                        button.Draw();
+                        Console.Write("\t");
+                    }
+
+                    HandleInput(buttons);
                 }
             }
 

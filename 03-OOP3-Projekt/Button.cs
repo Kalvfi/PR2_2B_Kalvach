@@ -96,4 +96,20 @@ namespace _03_OOP3_Projekt
             base.Draw();
         }
     }
+
+    class BoolButton : Button
+    {
+        public bool Type { get; private set; }
+
+        public BoolButton(bool type, string label, Action action) : base(label, action)
+        {
+            Type = type;
+        }
+
+        public override void Draw()
+        {
+            Console.ForegroundColor = (Type) ? ConsoleColor.Green : ConsoleColor.Red;
+            base.Draw();
+        }
+    }
 }
