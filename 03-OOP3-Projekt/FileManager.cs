@@ -101,7 +101,6 @@ namespace _03_OOP3_Projekt
                 Console.Clear();
                 Console.Write("Načtený soubor neobsahuje kompatibilní data.");
                 Console.ReadKey();
-
                 CurrentFileName = null;
                 return null;
             }
