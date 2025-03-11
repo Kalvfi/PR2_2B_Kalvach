@@ -60,4 +60,4 @@ Poskytuje funkcionalitu pro práci se soubory v aplikaci.
 - `SerializeSalesmen` - převede seznam obchodníků na textový řetězec pro uložení
 - `DeserializeSalesmen` - převede textový řetězec na seznam obchodníků při načtení
 
-FileManager pracuje se soubory ve formátu .txt, kde každý řádek obsahuje `ID` obchodníka.
+`FileManager` pracuje se soubory ve formátu .txt, kde každý řádek obsahuje `ID` obchodníka.
