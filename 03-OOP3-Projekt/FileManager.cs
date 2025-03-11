@@ -90,8 +90,22 @@ namespace _03_OOP3_Projekt
 
         private static List<Salesman> DeserializeSalesmen(Salesman root, string content)
         {
-            int[] salesmenIDs = content.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            int[] salesmenIDs;
 
+            try
+            {
+                salesmenIDs = content.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            }
+            catch 
+            {
+                Console.Clear();
+                Console.Write("Načtený soubor neobsahuje kompatibilní data.");
+                Console.ReadKey();
+
+                CurrentFileName = null;
+                return null;
+            }
+            
             List<Salesman> salesmen = new List<Salesman>();
 
             foreach (int ID in salesmenIDs)
