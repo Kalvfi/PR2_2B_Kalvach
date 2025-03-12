@@ -247,7 +247,7 @@ namespace _03_OOP3_Projekt
                 ];
                 buttons[0].IsSelected = true;
 
-                while (true) 
+                while (true)
                 {
                     Console.Clear();
                     Console.WriteLine("Máte neuložené změny. Chcete je uložit?\n");
