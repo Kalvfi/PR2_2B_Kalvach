@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="Projekt_Space_Invaders.Bullet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Projekt_Space_Invaders"
+             mc:Ignorable="d" 
+             d:DesignHeight="12" d:DesignWidth="4">
+    <Rectangle x:Name="BulletBody" Height="12" Width="4"/>
+</UserControl>
